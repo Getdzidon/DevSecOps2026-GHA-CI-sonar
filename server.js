@@ -2,7 +2,7 @@ const express = require("express");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const fs = require("fs");
+const fs = require("fs1");
 const { exec } = require("child_process");
 const path = require("path");
 
