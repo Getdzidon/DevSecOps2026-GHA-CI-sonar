@@ -1,8 +1,11 @@
 name: SonarQube Scan
 
-on: 
-  - push 
-  - pull_request
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   sonarqube:
