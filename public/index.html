@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerable Web App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        async function fetchUser() {
+            let username = document.getElementById("username").value;
+            let response = await fetch(`/user?username=${username}`);
+            let data = await response.text();
+            document.getElementById("output").innerHTML = data;
+        }
+
+        async function executeCommand() {
+            let cmd = document.getElementById("command").value;
+            let response = await fetch("/cmd", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `command=${cmd}`
+            });
+            let result = await response.text();
+            document.getElementById("cmdOutput").innerHTML = result;
+        }
+
+        async function uploadFile(event) {
+            let file = document.getElementById("file").files[0];
+            let formData = new FormData();
+            formData.append("file", file);
+
+            let response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.text();
+            document.getElementById("uploadOutput").innerHTML = result;
+        }
+    </script>
+</head>
+<body>
+    <h1>Vulnerable Web App</h1>
+
+    <h2>🔓 SQL Injection</h2>
+    <input type="text" id="username" placeholder="Enter username">
+    <button onclick="fetchUser()">Get User</button>
+    <div id="output"></div>
+
+    <h2>💀 Command Injection</h2>
+    <input type="text" id="command" placeholder="Enter shell command">
+    <button onclick="executeCommand()">Execute</button>
+    <div id="cmdOutput"></div>
+
+    <h2>⚠️ File Upload Vulnerability</h2>
+    <input type="file" id="file">
+    <button onclick="uploadFile()">Upload File</button>
+    <div id="uploadOutput"></div>
+
+    <h2>⚠️ XSS Example</h2>
+    <input type="text" id="xssInput" placeholder="Enter name">
+    <a href="http://localhost:3000/?name=<script>alert('XSS!')</script>">Click to Trigger XSS</a>
+</body>
+</html>
